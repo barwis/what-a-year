@@ -1,0 +1,28 @@
+{
+  "name": "what-a-year",
+  "version": "1.0.0",
+  "description": "What a year, huh?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barwis/what-a-year.git"
+  },
+  "author": "barwis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barwis/what-a-year/issues"
+  },
+  "homepage": "https://github.com/barwis/what-a-year#readme",
+  "dependencies": {
+    "canvas": "^2.11.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
