@@ -60,7 +60,7 @@ async function createImage() {
 
 }
 
-app.get('/whatayear.png', async (req, res) => {
+app.get('/', async (req, res) => {
     
     await createImage();
     res.setHeader('Content-Type', 'image/png');
