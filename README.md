@@ -6,7 +6,7 @@
 ### <u>What is it</u>
 Fun little project that generates text for speech bubbles. 
 
-An interactive version of  [this meme](https://knowyourmeme.com/memes/what-a-week-huh).
+An interactive version of  <a href="https://knowyourmeme.com/memes/what-a-week-huh" target="_blank">this meme</a>
 
 Always based on current date. 
 
