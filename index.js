@@ -3,10 +3,11 @@ const { registerFont, createCanvas, loadImage  } = require('canvas')
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3030;
+const imageSize = { width: 1024, height: 900 };
 
 registerFont('feltmark.ttf', { family: 'felt' });
 
-const canvas = createCanvas(1024, 900);
+const canvas = createCanvas(imageSize.width, imageSize.height);
 const ctx = canvas.getContext("2d");
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
@@ -47,10 +48,9 @@ function getCaption(type = null) {
 
 // returns x offset to make text appear centered in the speech bubble
 function getTextXPosition(caption, offset = 0) {
-    const iamgeWidth = 1024;
     const textWidth = ctx.measureText(caption ).width;
 
-    return (iamgeWidth - offset - textWidth) / 2;
+    return (imageSize.width - offset - textWidth) / 2;
 }
 
 app.get('/*', async (req, res) => {
