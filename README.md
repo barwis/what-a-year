@@ -38,4 +38,4 @@ It's probably pretty self-explanatory when looking at the code, but endpoints ar
 Root path `/` will point randomly to one of these above.
 
 ### <u>Live preview</u>
-see it live at [https://what-a-year.onrender.com/](https://what-a-year.onrender.com/)
+see it live at [https://what-a-year.onrender.com/](https://what-a-year.onrender.com/fullyear)
