@@ -5,8 +5,11 @@
 
 ### <u>What is it</u>
 Fun little project that generates text for speech bubbles. 
+
 An interactive version of  [this meme](https://knowyourmeme.com/memes/what-a-week-huh).
+
 Always based on current date. 
+
 Little node app that generates image on canvas and serves it as png file.
 
 ### <u>The stack</u>
