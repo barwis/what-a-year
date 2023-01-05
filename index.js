@@ -17,15 +17,17 @@ function ordinal(d) {
     return d < 4 ? ords[d] : ords[4];
 }
 
-function getCaption(type) {
+function getCaption(type = null) {
+    const types = ['century', 'fullyear', 'year', 'month', 'week', 'day'];
+    const _type = type || types[Math.floor(Math.random()*types.length)];
     const today = new Date();
-    const time = today.getHours() + ':' + today.getMinutes();
+    const time = today.getHours() + ':' + String(today.getMinutes()).padStart(2, "0");
     const day = today.getDate() + ordinal(today.getDate());
     const dayOfWeek = dowNames[today.getDay()];
     const month = monthNames[today.getMonth()];
     const year = today.getFullYear();
 
-    switch ( type ) {
+    switch ( _type ) {
         case 'century':
             return ['century', `year ${year}` ];
         case 'fullyear':
@@ -56,8 +58,8 @@ app.get('/*', async (req, res) => {
 
     // set up texts
     const captions = getCaption(endpoint);
-    const text1string = endpoint ? `What a ${captions[0]}, huh?` :  `...` ;
-    const text2string = endpoint ? `Captain, it's ${captions[1]}` : 'Captain...';
+    const text1string = `What a ${captions[0]}, huh?`;
+    const text2string = `Captain, it's ${captions[1]}`;
 
     // load background image
     const localImage = await loadImage("./img.jpg");
