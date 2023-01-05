@@ -4,69 +4,81 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3030;
 
-registerFont('feltmark.ttf', { family: 'felt' })
+registerFont('feltmark.ttf', { family: 'felt' });
 
 const canvas = createCanvas(1024, 900);
 const ctx = canvas.getContext("2d");
 
-
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+const dowNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function ordinal(d) {
-    if (d > 3 && d < 21) return 'th';
-    switch (d % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
+    const ords = [null, 'st', 'nd', 'rd', 'th']; 
+    return d < 4 ? ords[d] : ords[4];
+}
+
+function getCaption(type) {
+    const today = new Date();
+    const time = today.getHours() + ':' + today.getMinutes();
+    const day = today.getDate() + ordinal(today.getDate());
+    const dayOfWeek = dowNames[today.getDay()];
+    const month = monthNames[today.getMonth()];
+    const year = today.getFullYear();
+
+    switch ( type ) {
+        case 'century':
+            return ['century', `year ${year}` ];
+        case 'fullyear':
+            return ['year', `${day} of ${month}`];
+        case 'year': 
+            return ['year', month];
+        case 'month':
+            return ['month', `the ${day}`];
+        case 'week':
+            return ['week', dayOfWeek];
+        case 'day':
+            return ['day', time];
+        default:
+            return ['...', '...'];
     }
 }
 
-function getCaption() {
-    const today =  new Date();
-    let day = today.getDate();
-    day += ordinal(day);
-    const month = monthNames[today.getMonth()];
-    const caption = day + ' of ' + month;
-    return caption;
+// returns x offset to make text appear centered in the speech bubble
+function getTextXPosition(caption, offset = 0) {
+    const iamgeWidth = 1024;
+    const textWidth = ctx.measureText(caption ).width;
+
+    return (iamgeWidth - offset - textWidth) / 2;
 }
 
-async function createImage() {
-    const caption = getCaption();
-    const text1string = 'What a year, huh?';
-    const text2string = 'Captain, it\'s ' + caption;
+app.get('/*', async (req, res) => {
+    const endpoint = req.url.replace(/\W/gi, ''); // remove everything but letters
 
+    // set up texts
+    const captions = getCaption(endpoint);
+    const text1string = endpoint ? `What a ${captions[0]}, huh?` :  `...` ;
+    const text2string = endpoint ? `Captain, it's ${captions[1]}` : 'Captain...';
 
-    const localImage = await loadImage("./img.jpg");       
-    ctx.drawImage(localImage, 0, 0); 
+    // load background image
+    const localImage = await loadImage("./img.jpg");
+    ctx.drawImage(localImage, 0, 0);
 
-
-
-    ctx.font = '52px felt'
+    // set font style
     ctx.fillStyle = 'black';
     ctx.textBaseline = 'top';
     ctx.letterSpacing = "2px";
     ctx.textBaseline = "top";
-    const text1Width =  textWidth = ctx.measureText(text1string ).width;
-    const text1left = (1024 - text1Width) / 2;
-    ctx.fillText(text1string, text1left, 150);
 
+    // first bubble speech
+    ctx.font = '52px felt';
+    ctx.fillText(text1string, getTextXPosition(text1string), 150);
+
+    // second bubble speech
     ctx.font = '43px felt';
+    ctx.fillText(text2string, getTextXPosition(text2string, 244), 298);
 
-    const text2Width =  textWidth = ctx.measureText(text2string ).width;
-    const text2left = (620 - text2Width) / 2 + 80;
-    
-    ctx.fillText(text2string, text2left, 298);
-
-}
-
-app.get('/', async (req, res) => {
-    
-    await createImage();
     res.setHeader('Content-Type', 'image/png');
-    // res.send('hello world!')
-    canvas.createPNGStream().pipe(res);
-
+    canvas.createPNGStream().pipe(res); // return canvas as png image
 });
 
 app.listen(PORT, () => {
